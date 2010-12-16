@@ -1,0 +1,16 @@
+{
+  "name": "Kanbanery Extension",
+  "version": "1.0",
+  "description": "Kanabanery Ext",
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "https://kanbanery.com/api/v1"
+  ],
+ "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html"
+  }
+}
+
