@@ -1,14 +1,29 @@
-<style>
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Theme specific CSS files are loaded later by the ThemeManager -->
+    <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
+    <title>KanbaApp</title>
+    <script>
+      var KANBANERY_API_URL = 'smackho.st:3000/api/v1';
+      var Kanbanery = {};
 
-</style>
-<div>
-  <form id="new_task" action="">
-    <select name="type">
-      <option value="bug">Bug</option>
-    </select>
+      Kanbanery.Task = ''; 
+    </script>
 
-    <input name="title" />
-    <textarea name="description"></textarea>
-    
-  </form>
-</div>
+    <style></style>
+  </head>
+  <body>
+    <div>
+      <form id="new_task" action="">
+        <select name="type">
+          <option value="bug">Bug</option>
+        </select>
+
+        <input name="title" />
+        <textarea name="description"></textarea>
+
+      </form>
+    </div>
+  </body>
+</html>
