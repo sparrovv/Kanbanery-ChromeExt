@@ -3,12 +3,77 @@
   <head>
     <!-- Theme specific CSS files are loaded later by the ThemeManager -->
     <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
+    <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+    <script type="text/javascript" src="lib/3rdparty/classy.js"></script>
     <title>KanbaApp</title>
     <script>
-      var KANBANERY_API_URL = 'smackho.st:3000/api/v1';
+      // main url
+      // TODO move to some config file
+      var KANBANERY_API_URL = 'http://sparrow.smackaho.st:3000/api/v1/projects/1/tasks.json';
+      var WORKSPACE = 'sparrow';
       var Kanbanery = {};
 
-      Kanbanery.Task = ''; 
+      Kanbanery.Task =  Class.$extend({
+
+        __init__: function() {
+          this.form = $('#new_task');
+        },
+
+        add: function(){
+          //Get form info
+          var tile = form.find('.title').val();
+          var type = '';
+        },
+      });
+
+      function checkAuthentication(){
+        
+      };
+
+      function ajaxRequest(httpMethod, requestUrl, successCallback){
+        $.ajax({
+          type: httpMethod,
+          url: requestUrl,
+          data: '',
+          dataType: "json",
+          timeout: 60,
+          success: successCallback,
+          error: function(){},
+          complete: function(request) {
+            if(!request) return;
+            try {
+              var remaining = request.getResponseHeader("X-RateLimit-Remaining");
+              if(remaining) {
+  //              _this.remainingHitsCount = remaining;
+  //              _this.nextHitsReset = request.getResponseHeader("X-RateLimit-Reset");
+  //              _this.hourlyLimit = request.getResponseHeader("X-RateLimit-Limit");
+
+  //              _this.onHitsUpdated(_this.remainingHitsCount, _this.nextHitsReset, _this.hourlyLimit);
+              }
+            } catch(e) { /* ignoring */ }
+          }
+        });
+      }
+
+      function test(response){
+        console.log(response);
+      }
+      //  
+      function fetchTasks(){
+        $.ajax({
+          url: KANBANERY_API_URL,
+          success: function(data) {
+            $('.result').html(data);
+            alert('Load was performed.');
+          }
+        });
+      }
+
+      $(function(){
+        console.log('start');
+        fetchTasks();
+        console.log('end');
+      })
     </script>
 
     <style></style>
