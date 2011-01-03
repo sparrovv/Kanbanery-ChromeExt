@@ -9,9 +9,39 @@
     <script>
       // main url
       // TODO move to some config file
-      var KANBANERY_API_URL = 'http://sparrow.smackaho.st:3000/api/v1/projects/1/tasks.json';
+      var KANBANERY_API_URL = 'smackaho.st:3000/api/v1';
       var WORKSPACE = 'sparrow';
       var Kanbanery = {};
+      function kanbaneryApiUrl(url){
+        return WORKSPACE + KANBANERY_API_URL + url;
+      }
+      Kanbanery.Project = Class.$extend({
+        list: function() {
+          var url = 'projects.json';        
+          var project = Kanbanery.Ajax.get(url);
+        },
+
+        get: function(id){
+          var url = ['projects/', id, '.json'].join('');
+          var project = Kanbanery.Ajax.get(url);
+          return project;
+        }
+      });
+
+      Kanbanery.Ajax = {
+        get: function(url){
+          $.ajax({
+            url: kanbaneryApiUrl(url),
+            success: function(data) {
+              $('.result').html(data);
+              console.log(data);
+              alert('Load was performed.');
+          }
+        });
+ 
+        } 
+      
+      };
 
       Kanbanery.Task =  Class.$extend({
 
@@ -21,9 +51,9 @@
 
         add: function(){
           //Get form info
-          var tile = form.find('.title').val();
+         var tile = form.find('.title').val();
           var type = '';
-        },
+       },
       });
 
       function checkAuthentication(){
@@ -71,7 +101,9 @@
 
       $(function(){
         console.log('start');
-        fetchTasks();
+        var k = new Kanbanery.Project();
+        k.list();
+        k.list(1);
         console.log('end');
       })
     </script>
