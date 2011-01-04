@@ -12,13 +12,33 @@
       var KANBANERY_API_URL = 'smackaho.st:3000/api/v1';
       var WORKSPACE = 'sparrow';
       var Kanbanery = {};
+
       function kanbaneryApiUrl(url){
-        return WORKSPACE + KANBANERY_API_URL + url;
+        return 'http://' + WORKSPACE + '.' + KANBANERY_API_URL + '/' + url;
+      };
+
+      function checkAuthentication(){
+        
+      };
+
+      function projectId(){
+        return $("#project_id").val(); 
       }
+ 
       Kanbanery.Project = Class.$extend({
-        list: function() {
+        __init__: function(){
+          this.list = [];
+        },
+
+        getList: function() {
+          var that = this;
           var url = 'projects.json';        
-          var project = Kanbanery.Ajax.get(url);
+          $.get(kanbaneryApiUrl(url), 
+             function(data){
+               console.log(data)
+               alert("Data Loaded: " + data);
+             }
+          );
         },
 
         get: function(id){
@@ -27,83 +47,45 @@
           return project;
         }
       });
+      Kanbanery.Type = Class.$extend({
+        __init__: function(project){
+          this.types = [];
+          this.project = project;
+        },
 
-      Kanbanery.Ajax = {
-        get: function(url){
-          $.ajax({
-            url: kanbaneryApiUrl(url),
-            success: function(data) {
-              $('.result').html(data);
-              console.log(data);
-              alert('Load was performed.');
-          }
-        });
- 
-        } 
+        getList: function(){
+        var url = '';
+        }
       
-      };
-
-      Kanbanery.Task =  Class.$extend({
-
+      })
+     Kanbanery.Task =  Class.$extend({
         __init__: function() {
           this.form = $('#new_task');
         },
 
         add: function(){
-          //Get form info
-         var tile = form.find('.title').val();
-          var type = '';
-       },
+         //POST https://WORKSPACE.kanbanery.com/api/v1/projects/PROJECT_ID/tasks.json
+         this.form.submit(function(event){
+           event.preventDefault();
+           var url = 'projects/' + projectId() + '/tasks.json'
+           var params = $(this).serialize();
+
+           console.log(params)
+           $.post(kanbaneryApiUrl(url), params, function(data){
+             console.log(data);
+           });
+
+           return false;
+         });
+       }
+
       });
-
-      function checkAuthentication(){
-        
-      };
-
-      function ajaxRequest(httpMethod, requestUrl, successCallback){
-        $.ajax({
-          type: httpMethod,
-          url: requestUrl,
-          data: '',
-          dataType: "json",
-          timeout: 60,
-          success: successCallback,
-          error: function(){},
-          complete: function(request) {
-            if(!request) return;
-            try {
-              var remaining = request.getResponseHeader("X-RateLimit-Remaining");
-              if(remaining) {
-  //              _this.remainingHitsCount = remaining;
-  //              _this.nextHitsReset = request.getResponseHeader("X-RateLimit-Reset");
-  //              _this.hourlyLimit = request.getResponseHeader("X-RateLimit-Limit");
-
-  //              _this.onHitsUpdated(_this.remainingHitsCount, _this.nextHitsReset, _this.hourlyLimit);
-              }
-            } catch(e) { /* ignoring */ }
-          }
-        });
-      }
-
-      function test(response){
-        console.log(response);
-      }
-      //  
-      function fetchTasks(){
-        $.ajax({
-          url: KANBANERY_API_URL,
-          success: function(data) {
-            $('.result').html(data);
-            alert('Load was performed.');
-          }
-        });
-      }
 
       $(function(){
         console.log('start');
-        var k = new Kanbanery.Project();
-        k.list();
-        k.list(1);
+        k = new Kanbanery.Task();
+        k.add();
+
         console.log('end');
       })
     </script>
@@ -112,14 +94,19 @@
   </head>
   <body>
     <div>
-      <form id="new_task" action="">
-        <select name="type">
-          <option value="bug">Bug</option>
-        </select>
-
+      <label>Project Id</label>
+      <input name="project_id" id="project_id"></input>
+      <form id="new_task" action="tasks.json">
+        <select name="task_type_id">
+          <option value="1">Bug</option>
+        </select><br />
+        <label for="title">Title</label>
         <input name="title" />
+        
+        <label for="description">Desription</label>
         <textarea name="description"></textarea>
 
+        <input type="submit" value="Go" name="submit" />
       </form>
     </div>
   </body>
