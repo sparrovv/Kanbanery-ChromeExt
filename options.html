@@ -1,0 +1,50 @@
+<html>
+  <head><title>Kanbanery Options</title></head>
+  <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+  <script type="text/javascript">
+
+    // Saves options to localStorage.
+  function save_options() {
+    localStorage["workspace"] = $('#workspace').val();
+    localStorage["projectId"] = $('#project').val();
+
+    // Update status to let user know options were saved.
+    var status = $("#status");
+    status.html("Options Saved.");
+    setTimeout(function() {
+        status.html("");
+        }, 750);
+  }
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+  $('#workspace').val(localStorage["workspace"]); 
+  $('#project').val(localStorage["projectId"]); 
+}
+
+</script>
+
+<body onload="restore_options()">
+  <h4>Kanbanery Options</h4>
+  <div id="container">
+    <div id="status"></div>
+    <p>
+      <label>Workspace</label>
+      <input id="workspace" name="workspace"/>
+    </p>
+    <p>
+      <label>Project Id</label>
+      <input id="project" name="project_id"/>
+      </p>
+      <p>
+      <label>User Token</label>
+      <input id="user-token" name="user_token"/>
+    </p>
+
+    <p>
+      <button onclick="save_options()">Save</button>
+    </p>
+  </div>
+</body>
+</html>
+

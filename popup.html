@@ -1,20 +1,70 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <script type="text/javascript">
+    Application = {};
+  </script>
     <!-- Theme specific CSS files are loaded later by the ThemeManager -->
     <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
     <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
     <script type="text/javascript" src="lib/3rdparty/classy.js"></script>
+    <script type="text/javascript" src="lib/flash.js"></script>
+    <script type="text/javascript" src="lib/ajax.js"></script>
+    
     <title>KanbaApp</title>
     <script>
       // main url
       // TODO move to some config file
       var KANBANERY_API_URL = 'smackaho.st:3000/api/v1';
-      var WORKSPACE = 'sparrow';
+      var WORKSPACE = localStorage["workspace"];
+      var PROJECTID = localStorage["projectId"];
       var Kanbanery = {};
+      Application.spinner_image = '<img src="img/ajax-loader-small.gif" />';
+      jQuery.fn.extend({
+        initSubmitButtons: function() {
+          $(this).submit(function(){
+            if ($(this).attr("submitted") == "true") {
+             return false;
+            }
+
+            $(this).attr("submitted", "true");
+     
+            var p = $(this).find(".buttons, .spinner_placeholder");
+            p.find("span").remove();
+            p.append(Application.spinner_image);
+
+          });
+            return $(this);
+        }
+      });
+
+      function openTab(tabUrl) {
+         var background = false;
+         if(tabUrl.match(/^www/i)) {
+           tabUrl = "http://" + tabUrl;
+         }
+         chrome.tabs.create({
+             url: tabUrl,
+             selected: !background
+         });
+         return true;
+       };
+
+
+      function navigation(){
+        $("#options-page-link").click(function(){
+          openTab(chrome.extension.getURL('options.html'));
+          return false;
+        });
+      }
 
       function kanbaneryApiUrl(url){
         return 'http://' + WORKSPACE + '.' + KANBANERY_API_URL + '/' + url;
+      };
+
+      function removeIndicator(form){
+        form.find('img').remove(); 
+        form.attr("submitted","false");
       };
 
       function checkAuthentication(){
@@ -22,91 +72,101 @@
       };
 
       function projectId(){
-        return $("#project_id").val(); 
-      }
-      
-      Kanbanery.Project = Class.$extend({
-        __init__: function(){
-          this.list = [];
-        },
+        return PROJECTID;
+      };
 
-        getList: function() {
-          var that = this;
-          var url = 'projects.json';        
-          $.get(kanbaneryApiUrl(url), 
-             function(data){
-               console.log(data)
-               alert("Data Loaded: " + data);
-             }
-          );
-        },
-
-        get: function(id){
-          var url = ['projects/', id, '.json'].join('');
-          var project = Kanbanery.Ajax.get(url);
-          return project;
-        }
-      });
       Kanbanery.Type = Class.$extend({
-        __init__: function(project){
-          this.types = [];
-          this.project = project;
-        },
 
         getList: function(){
-        var url = '';
+          var that = this;
+          var url = 'projects/' + projectId() + '/task_types.json';
+          Application.Flash.showNotice("Loading Data");   
+          Application.Ajax._get(kanbaneryApiUrl(url), {
+            success: function(result){
+              that.appendOptions(result);
+          }
+        });
+        },
+
+        appendOptions: function(types){
+          $.each(types, function(key, type)
+          {   
+               $('#task_type').
+                    append($("<option></option>").
+                    attr("value",type.id).
+                    text(type.name)); 
+          });
         }
+      });
       
-      })
-     Kanbanery.Task =  Class.$extend({
+      Kanbanery.Task =  Class.$extend({
         __init__: function() {
           this.form = $('#new_task');
         },
 
         add: function(){
          //POST https://WORKSPACE.kanbanery.com/api/v1/projects/PROJECT_ID/tasks.json
-         this.form.submit(function(event){
+         var that = this;
+         that.form.initSubmitButtons().submit(function(event){
            event.preventDefault();
            var url = 'projects/' + projectId() + '/tasks.json'
            var params = $(this).serialize();
 
-           console.log(params)
-           $.post(kanbaneryApiUrl(url), params, function(data){
-             console.log(data);
+           Application.Ajax._post(kanbaneryApiUrl(url), params,{
+             success: function(data){
+               console.log(data);
+               Application.Flash.showNotice("Saved!")
+               that.form[0].reset();
+               removeIndicator(that.form);
+             },
+             error: function(resposne){
+               console.log(response);
+               Application.Flash.showError("Form Not Valid")
+               removeIndicator(that.form);
+             }   
            });
 
            return false;
          });
        }
-
       });
 
       $(function(){
-        console.log('start');
         k = new Kanbanery.Task();
         k.add();
-
-        console.log('end');
+        t = new Kanbanery.Type();
+        t.getList();
+        navigation();
       })
     </script>
-
-    <style></style>
   </head>
   <body>
-    <div>
-      <label>Project Id</label>
-      <input name="project_id" id="project_id"></input>
+    <div id="container">
+      <div id="flash"></div>
+      <ul class="navigation">
+        <li><a id="options-page-link" href="#">Options</a></li> 
+      </ul>
+      <h4>ADD NEW TASK</h4>
       <form id="new_task" action="tasks.json">
-        <select name="task_type_id">
-          <option value="1">Bug</option>
-        </select><br />
-        <label for="title">Title</label>
-        <input name="title" />
-        
-        <label for="description">Desription</label>
-        <textarea name="description"></textarea>
+        <p>
+          <label for="title">Title</label>
+          <input name="task[title]" />
+        </p>
 
-        <input type="submit" value="Go" name="submit" />
+        <p>
+          <label for="task_type">Type</label>
+          <select id="task_type" name="task[task_type_id]">
+          </select>
+        </p>
+
+        <p> 
+          <label for="description">Desription</label><br />
+          <textarea rows="4" cols="30" name="task[description]"></textarea>
+        </p>
+
+        <p class="buttons">
+          <input type="submit" value="Add" name="submit" />
+        </p>
       </form>
     </div>
   </body>

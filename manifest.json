@@ -2,15 +2,16 @@
   "name": "Kanbanery Extension",
   "version": "1.0",
   "description": "Kanabanery Ext",
+  "options_page": "options.html",
   "browser_action": {
-    "default_icon": "icon.png"
+    "default_icon": "icon.jpeg"
   },
   "permissions": [
     "https://kanbanery.com/api/v1",
     "http://*.smackaho.st/*"
   ],
  "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon.jpeg",
     "popup": "popup.html"
   }
 }
