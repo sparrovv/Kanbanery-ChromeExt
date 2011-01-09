@@ -4,8 +4,12 @@ body{
   margin: 0;
   color: #777;
   font-family: Helvetica, Arial;
+  font-size: 12px;
   border: 1px solid;
   border-radius: 5px;
+}
+.clear{
+  clear:both;
 }
 #container{
   padding: 5px;
@@ -14,7 +18,10 @@ body{
 h4{
   margin:2px;
 }
-#flash {
+#flash{
+  font-size: 10px;
+}
+#flash .notice{
   color: green;
 }
 #flash .error{
@@ -30,6 +37,16 @@ ul.navigation {
 }
 
 ul.navigation li{
-
+  float: left;
 }
 
+ul.navigation li.right{
+  float:right;
+}
+
+p{
+  margin: 5px 0 0 0;
+}
+.buttons{
+  margin: 2px 0 0 0;
+}

@@ -7,7 +7,7 @@
     "default_icon": "icon.jpeg"
   },
   "permissions": [
-    "https://kanbanery.com/api/v1",
+    "https://*.kanbanery.com/*",
     "http://*.smackaho.st/*"
   ],
  "browser_action": {
