@@ -21,10 +21,10 @@ h4{
 #flash{
   font-size: 10px;
 }
-#flash .notice{
+#flash.notice{
   color: green;
 }
-#flash .error{
+#flash.error{
   color: red;
 }
 
