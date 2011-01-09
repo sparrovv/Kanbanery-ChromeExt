@@ -1,5 +1,6 @@
 <html>
   <head><title>Kanbanery Options</title></head>
+  <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/options.css" />
   <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
   <script type="text/javascript">
 
@@ -25,8 +26,8 @@ function restore_options() {
 </script>
 
 <body onload="restore_options()">
-  <h4>Kanbanery Options</h4>
   <div id="container">
+    <h4>Kanbanery Options</h4>
     <div id="status"></div>
     <p>
       <label>Workspace</label>
@@ -35,11 +36,11 @@ function restore_options() {
     <p>
       <label>Project Id</label>
       <input id="project" name="project_id"/>
-      </p>
-      <p>
-      <label>User Token</label>
-      <input id="user-token" name="user_token"/>
     </p>
+    <!--<p>-->
+      <!--<label>User Token</label>-->
+      <!--<input id="user-token" name="user_token"/>-->
+    <!--</p>-->
 
     <p>
       <button onclick="save_options()">Save</button>
