@@ -1,7 +1,7 @@
 {
-  "name": "Kanbanery Extension",
-  "version": "1.0",
-  "description": "Kanabanery Ext",
+  "name": "Chrome Kanban",
+  "version": "1.01",
+  "description": "Kanabanery Extension, which helps adding new tasks",
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.jpeg"
