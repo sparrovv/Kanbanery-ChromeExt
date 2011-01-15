@@ -1,6 +1,6 @@
 {
   "name": "Kanbanery for Chrome",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Kanabanery Extension, which helps adding new tasks",
   "options_page": "options.html",
   "browser_action": {
@@ -12,6 +12,11 @@
  "browser_action": {
     "default_icon": "icon.jpeg",
     "popup": "popup.html"
+  },
+  "icons": {
+     "128": "img/icon128.jpeg",
+     "48": "img/icon48.jpeg",
+     "16": "img/icon16.jpeg"
   }
 }
 
