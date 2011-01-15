@@ -9,6 +9,7 @@ var Kanbanery = {};
 <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
 <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
 <script type="text/javascript" src="lib/3rdparty/classy.js"></script>
+<script type="text/javascript" src="lib/3rdparty/underscore.js"></script>
 <script type="text/javascript" src="lib/flash.js"></script>
 <script type="text/javascript" src="lib/ajax.js"></script>
 <script type="text/javascript" src="lib/config.js"></script>
@@ -16,17 +17,13 @@ var Kanbanery = {};
 
 <title>KanbaApp</title>
 <script>
-  Kanbanery.checkSettings();
-  Kanbanery.isAuthenticated();
+  //Kanbanery.checkSettings();
 
   $(function(){
-    Kanbanery.showProject();
-    k = new Kanbanery.Task();
-    k.add();
-    e = new Kanbanery.Estimate();
-    e.getList();
-    t = new Kanbanery.Type();
-    t.getList();
+    Kanbanery.isAuthenticated();
+    var workspaces = new Kanbanery.Workspaces();
+    var task = new Kanbanery.Task();
+    task.add();
     Kanbanery.navigation();
   })
 </script>
@@ -35,10 +32,16 @@ var Kanbanery = {};
     <div id="container">
       <div id="flash"></div>
       <ul class="navigation">
-        <li>project id = <span id="project-id"></span></li>
         <li class="right"><a id="options-page-link" href="#">Options</a></li> 
       </ul>
       <div class="clear"></div>
+      <p>
+        <label for="workspaces">Workspace: </label>
+        <select id="workspaces"></select>
+      </p><p>
+        <label for="workspaces">Project: </label>
+        <select id="projects"></select>
+      </p>
       <h4>Add New Task</h4>
       <form id="new_task" action="tasks.json">
         <p>
@@ -60,8 +63,8 @@ var Kanbanery = {};
         </p>
 
         <p> 
-          <label for="description">Desription</label><br />
-          <textarea rows="4" cols="30" name="task[description]"></textarea>
+          <label for="description">Desription</label>
+          <textarea rows="4" cols="20" name="task[description]"></textarea>
         </p>
 
         <p class="buttons">
