@@ -47,6 +47,17 @@ ul.navigation li.right{
 p{
   margin: 5px 0 0 0;
 }
+p label{
+  display: block;
+  float: left;
+  line-height: 2em;
+  margin-right: 10px;
+  text-align: right;
+  width: 70px;
+}
+p select{
+
+}
 .buttons{
   margin: 2px 0 0 0;
 }
