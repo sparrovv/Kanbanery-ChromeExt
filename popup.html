@@ -1,76 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
+<script type="text/javascript">
+  var Application = {};
+  var Kanbanery = {};
+    </script>
+    <!-- Theme specific CSS files are loaded later by the ThemeManager -->
+    <link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
+    <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
+    <script type="text/javascript" src="lib/3rdparty/classy.js"></script>
+    <script type="text/javascript" src="lib/3rdparty/underscore.js"></script>
+    <script type="text/javascript" src="lib/flash.js"></script>
+    <script type="text/javascript" src="lib/ajax.js"></script>
+    <script type="text/javascript" src="lib/config.js"></script>
+    <script type="text/javascript" src="lib/kanbanery.js"></script>
+
+    <title>KanbaApp</title>
     <script type="text/javascript">
-      var Application = {};
-var Kanbanery = {};
-</script>
-<!-- Theme specific CSS files are loaded later by the ThemeManager -->
-<link id="base_stylesheet" rel="stylesheet" type="text/css" href="css/base.css" />
-<script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
-<script type="text/javascript" src="lib/3rdparty/classy.js"></script>
-<script type="text/javascript" src="lib/3rdparty/underscore.js"></script>
-<script type="text/javascript" src="lib/flash.js"></script>
-<script type="text/javascript" src="lib/ajax.js"></script>
-<script type="text/javascript" src="lib/config.js"></script>
-<script type="text/javascript" src="lib/kanbanery.js"></script>
+      $(function(){
+        Kanbanery.isAuthenticated();
+        var workspaces = new Kanbanery.Workspaces();
+        var task = new Kanbanery.Task();
+        task.add();
+        Kanbanery.navigation();
+      })
+    </script>
+</head>
+<body>
+<div id="container">
+  <!--<div id="flash"></div>-->
+  <ul class="navigation">
+    <li id="flash" class="left"></li> 
+    <li class="right"><a id="options-page-link" href="#">Options</a></li> 
+  </ul>
+  <div class="clear"></div>
+  <p>
+    <label for="workspaces">Workspace: </label>
+    <select id="workspaces"></select>
+    </p><p>
+    <label for="workspaces">Project: </label>
+    <select id="projects"></select>
+  </p>
+  <h4>Add New Task</h4>
+  <form id="new_task" action="tasks.json">
+    <p>
+      <label for="title">Title</label>
+      <input name="task[title]" />
+    </p>
 
-<title>KanbaApp</title>
-<script>
-  //Kanbanery.checkSettings();
+    <p>
+      <label for="task_type">Type</label>
+      <select id="task_type" name="task[task_type_id]">
+      </select>
+    </p>
 
-  $(function(){
-    Kanbanery.isAuthenticated();
-    var workspaces = new Kanbanery.Workspaces();
-    var task = new Kanbanery.Task();
-    task.add();
-    Kanbanery.navigation();
-  })
-</script>
-  </head>
-  <body>
-    <div id="container">
-      <div id="flash"></div>
-      <ul class="navigation">
-        <li class="right"><a id="options-page-link" href="#">Options</a></li> 
-      </ul>
-      <div class="clear"></div>
-      <p>
-        <label for="workspaces">Workspace: </label>
-        <select id="workspaces"></select>
-      </p><p>
-        <label for="workspaces">Project: </label>
-        <select id="projects"></select>
-      </p>
-      <h4>Add New Task</h4>
-      <form id="new_task" action="tasks.json">
-        <p>
-          <label for="title">Title</label>
-          <input name="task[title]" />
-        </p>
+    <p>
+      <label for="task_estimates">Estimates</label>
+      <select id="task_estimates" name="task[estimate_id]">
+        <option value=""> </option>
+      </select>
+    </p>
 
-        <p>
-          <label for="task_type">Type</label>
-          <select id="task_type" name="task[task_type_id]">
-          </select>
-        </p>
+    <p> 
+      <label for="description">Desription</label>
+      <textarea rows="4" cols="20" name="task[description]"></textarea>
+    </p>
 
-        <p>
-          <label for="task_estimates">Estimates</label>
-          <select id="task_estimates" name="task[estimate_id]">
-            <option value=""> </option>
-          </select>
-        </p>
-
-        <p> 
-          <label for="description">Desription</label>
-          <textarea rows="4" cols="20" name="task[description]"></textarea>
-        </p>
-
-        <p class="buttons">
-          <input type="submit" value="Add" name="submit" />
-        </p>
-      </form>
-    </div>
-  </body>
+    <p class="buttons">
+      <input type="submit" value="Add" name="submit" />
+    </p>
+  </form>
+</div>
+</body>
 </html>
