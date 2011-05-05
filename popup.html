@@ -10,6 +10,7 @@
     <script type="text/javascript" src="lib/3rdparty/jquery.js"></script>
     <script type="text/javascript" src="lib/3rdparty/classy.js"></script>
     <script type="text/javascript" src="lib/3rdparty/underscore.js"></script>
+    <script type="text/javascript" src="lib/3rdparty/mustache.js"></script>
     <script type="text/javascript" src="lib/flash.js"></script>
     <script type="text/javascript" src="lib/ajax.js"></script>
     <script type="text/javascript" src="lib/config.js"></script>
@@ -22,7 +23,10 @@
         var workspaces = new Kanbanery.Workspaces();
         var task = new Kanbanery.Task();
         task.add();
+
         Kanbanery.navigation();
+
+        Kanbanery.Tabs.init();
       })
     </script>
 </head>
@@ -35,41 +39,53 @@
   </ul>
   <div class="clear"></div>
   <p>
-    <label for="workspaces">Workspace: </label>
+    <span>Workspace: </span>
     <select id="workspaces"></select>
-    </p><p>
-    <label for="workspaces">Project: </label>
+    <span>Project: </span>
     <select id="projects"></select>
   </p>
-  <h4>Add New Task</h4>
-  <form id="new_task" action="tasks.json">
-    <p>
-      <label for="title">Title</label>
-      <input name="task[title]" />
-    </p>
+  <ul class="tabs">
+    <li class="active"><a data-tab-id="new_task" href="#">Add Task</a></li>
+    <li><a data-tab-id="project-log" href="#">Project Log</a></li>
+  </ul>
 
-    <p>
-      <label for="task_type">Type</label>
-      <select id="task_type" name="task[task_type_id]">
-      </select>
-    </p>
+  <div class="tabs active">
+    <form id="new_task" action="tasks.json">
+      <p>
+        <label for="title">Title</label>
+        <input name="task[title]" />
+      </p>
 
-    <p>
-      <label for="task_estimates">Estimates</label>
-      <select id="task_estimates" name="task[estimate_id]">
-        <option value=""> </option>
-      </select>
-    </p>
+      <p>
+        <label for="task_type">Type</label>
+        <select id="task_type" name="task[task_type_id]">
+        </select>
+      </p>
 
-    <p> 
-      <label for="description">Desription</label>
-      <textarea rows="4" cols="20" name="task[description]"></textarea>
-    </p>
+      <p>
+        <label for="task_estimates">Estimates</label>
+        <select id="task_estimates" name="task[estimate_id]">
+          <option value=""> </option>
+        </select>
+      </p>
 
-    <p class="buttons">
-      <input type="submit" value="Add" name="submit" />
-    </p>
-  </form>
+      <p> 
+        <label for="description">Desription</label>
+        <textarea rows="4" cols="20" name="task[description]"></textarea>
+      </p>
+
+      <p class="buttons">
+        <input type="submit" value="Add" name="submit" />
+      </p>
+    </form>
+  </div>
+    <div class="tabs">
+
+    <ul id="project-log">
+
+    </ul>
+  </div>
+  
 </div>
 </body>
 </html>
